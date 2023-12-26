@@ -18,7 +18,6 @@ const updateArticle = async (req, res) => {
   const { title, content } = req.body;
 
   const updatedArticle = await Article.findByIdAndUpdate(id, { title, content })
-  console.log('updatedArticle: ', updatedArticle);
 
   return res.status(200).json({ success: true, article: updatedArticle })
 };
