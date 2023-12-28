@@ -1,11 +1,15 @@
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
+const dotenv = require("dotenv")
 const initDatabase = require("./config/database");
 const articleRouter = require("./routes/article.route");
 
 const PORT = 8082;
 
 const init = async () => {
+  await dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
+
   await initDatabase();
    
   const app = express();
