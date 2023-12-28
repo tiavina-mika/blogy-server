@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 const initDatabase = require("./config/database");
-const { createArticle, updateArticle, deleteArticle, getArticle, getArticles } = require("./controllers/article.controller");
+const articleRouter = require("./routes/article.route");
 
 const PORT = 8082;
 
@@ -17,11 +17,7 @@ const init = async () => {
   app.use(express.static('public'));
 
   // -------- endpoints -------- //
-  app.post('/articles', createArticle)
-  app.put('/articles/:id', updateArticle)
-  app.delete('/articles/:id', deleteArticle)
-  app.get('/articles/:id', getArticle)
-  app.get('/articles', getArticles)
+  app.use('/articles', articleRouter)
 
   app.listen(PORT, () => {
     console.log("server running on port:" + PORT);
