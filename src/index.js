@@ -1,26 +1,31 @@
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
+const dotenv = require("dotenv")
 const initDatabase = require("./config/database");
-const { createArticle, updateArticle, deleteArticle, getArticle, getArticles } = require("./controllers/article.controller");
-
-initDatabase();
+const articleRouter = require("./routes/article.route");
 
 const PORT = 8082;
-const app = express();
 
-// -------- app config -------- //
-app.use(cors());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json())
-app.use(express.static('public'));
+const init = async () => {
+  await dotenv.config({ path: path.join(__dirname, '..', '.env.local') });
 
-// -------- endpoints -------- //
-app.post('/articles', createArticle)
-app.put('/articles/:id', updateArticle)
-app.delete('/articles/:id', deleteArticle)
-app.get('/articles/:id', getArticle)
-app.get('/articles', getArticles)
+  await initDatabase();
+   
+  const app = express();
 
-app.listen(PORT, () => {
-  console.log("server running on port:" + PORT);
-})
+  // -------- app config -------- //
+  app.use(cors());
+  app.use(express.urlencoded({ extended: false }));
+  app.use(express.json())
+  app.use(express.static('public'));
+
+  // -------- endpoints -------- //
+  app.use('/articles', articleRouter)
+
+  app.listen(PORT, () => {
+    console.log("server running on port:" + PORT);
+  })
+}
+
+init();
